@@ -1,0 +1,16 @@
+{
+  "name": "1-instance",
+  "version": "1.0.0",
+  "description": "A lite version for vue",
+  "main": "index.js",
+  "scripts": {
+    "dev": "parcel -p 8081 watch index.html"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "parcel": "^2.0.0-alpha.3.2",
+    "parcel-bundler": "^1.12.4"
+  },
+  "dependencies": {}
+}
