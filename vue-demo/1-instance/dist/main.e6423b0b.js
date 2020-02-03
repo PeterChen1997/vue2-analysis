@@ -849,10 +849,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
     for (var i = 0, l = subs.length; i < l; i++) {
       subs[i].update();
     }
-  }; // the current target watcher being evaluated.
-  // this is globally unique because there could be only one
-  // watcher being evaluated at any time.
-
+  };
 
   Dep.target = null;
   var targetStack = [];
@@ -1255,12 +1252,6 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
     }
   }
   /*  */
-
-  /**
-   * Option overwriting strategies are functions that handle
-   * how to merge a parent option value and a child option
-   * value into the final value.
-   */
 
 
   var strats = config.optionMergeStrategies;
@@ -2321,17 +2312,6 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
     return false;
   }
   /*  */
-  // The template compiler attempts to minimize the need for normalization by
-  // statically analyzing the template at compile time.
-  //
-  // For plain HTML markup, normalization can be completely skipped because the
-  // generated render function is guaranteed to return Array<VNode>. There are
-  // two cases where extra normalization is needed:
-  // 1. When the children contains components - because a functional component
-  // may return an Array instead of a single root. In this case, just a simple
-  // normalization is needed - if any child is an Array, we flatten the whole
-  // thing with Array.prototype.concat. It is guaranteed to be only 1-level deep
-  // because functional components already normalize their own children.
 
 
   function simpleNormalizeChildren(children) {
@@ -2784,6 +2764,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
   }
 
   function lifecycleMixin(Vue) {
+    // vnode挂载逻辑
     Vue.prototype._update = function (vnode, hydrating) {
       var vm = this;
 
@@ -3835,10 +3816,6 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
   }
   /*  */
 
-  /**
-   * Runtime helper for rendering v-for lists.
-   */
-
 
   function renderList(val, render) {
     var ret, i, l, keys, key;
@@ -3872,10 +3849,6 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
     return ret;
   }
   /*  */
-
-  /**
-   * Runtime helper for rendering <slot>
-   */
 
 
   function renderSlot(name, fallback, props, bindObject) {
@@ -3921,10 +3894,6 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
   }
   /*  */
 
-  /**
-   * Runtime helper for resolving filters
-   */
-
 
   function resolveFilter(id) {
     return resolveAsset(this.$options, 'filters', id, true) || identity;
@@ -3958,10 +3927,6 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
     }
   }
   /*  */
-
-  /**
-   * Runtime helper for merging v-bind="object" into a VNode's data.
-   */
 
 
   function bindObjectProps(data, tag, value, asProp, isSync) {
@@ -4221,12 +4186,10 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
   /*  */
   // https://github.com/Hanks10100/weex-native-directive/tree/master/component
-  // listening on native callback
 
   /*  */
 
   /*  */
-  // inline hooks to be invoked on component VNodes during patch
 
 
   var componentVNodeHooks = {
@@ -4439,7 +4402,8 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
     if (isTrue(alwaysNormalize)) {
       normalizationType = ALWAYS_NORMALIZE;
-    }
+    } // normalizationType 表示子节点规范的类型，类型不同规范的方法也就不一样，它主要是参考 render 函数是编译生成的还是用户手写的
+
 
     return _createElement(context, tag, data, children, normalizationType);
   }
@@ -4480,7 +4444,8 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       children = normalizeChildren(children);
     } else if (normalizationType === SIMPLE_NORMALIZE) {
       children = simpleNormalizeChildren(children);
-    }
+    } // vnode创建过程
+
 
     var vnode, ns;
 
@@ -5177,8 +5142,6 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
   });
   Vue.version = '2.5.17';
   /*  */
-  // these are reserved for web because they are directly compiled away
-  // during template compilation
 
   var isReservedAttr = makeMap('style,class'); // attributes that should be using props for binding
 
@@ -5362,10 +5325,6 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
   var isTextInputType = makeMap('text,number,password,search,email,tel,url');
   /*  */
-
-  /**
-   * Query an element selector if it's not an element already.
-   */
 
   function query(el) {
     if (typeof el === 'string') {
@@ -5728,6 +5687,8 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
     }
 
     function insert(parent, elm, ref$$1) {
+      debugger;
+
       if (isDef(parent)) {
         if (isDef(ref$$1)) {
           if (ref$$1.parentNode === parent) {
@@ -7133,10 +7094,6 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
     }
   }
   /*  */
-  // normalize v-model event tokens that can only be determined at runtime.
-  // it's important to place the event as the first in the array because
-  // the whole point is ensuring the v-model callback gets called before
-  // user-attached handlers.
 
 
   function normalizeEvents(on) {
@@ -8025,8 +7982,6 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
   } : {};
   var platformModules = [attrs, klass, events, domProps, style, transition];
   /*  */
-  // the directive module should be applied last, after all
-  // built-in modules have been applied.
 
   var modules = platformModules.concat(baseModules);
   var patch = createPatchFunction({
@@ -8037,8 +7992,6 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
    * Not type checking this file because flow doesn't like attaching
    * properties to Elements.
    */
-
-  /* istanbul ignore if */
 
   if (isIE9) {
     // http://www.matts411.com/post/internet-explorer-9-oninput/
@@ -8187,7 +8140,6 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
     el.dispatchEvent(e);
   }
   /*  */
-  // recursively search for possible transition defined inside the component root
 
 
   function locateNode(vnode) {
@@ -8602,7 +8554,6 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
     TransitionGroup: TransitionGroup
   };
   /*  */
-  // install platform specific utils
 
   Vue.config.mustUseProp = mustUseProp;
   Vue.config.isReservedTag = isReservedTag;
@@ -8810,7 +8761,6 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
    * Original code by Erik Arvidsson, Mozilla Public License
    * http://erik.eae.net/simplehtmlparser/simplehtmlparser.js
    */
-  // Regular Expressions for parsing tags and attributes
 
   var attribute = /^\s*([^\s"'<>\/=]+)(?:\s*(=)\s*(?:"([^"]*)"+|'([^']*)'+|([^\s"'=<>`]+)))?/; // could use https://www.w3.org/TR/1999/REC-xml-names-19990114/#NT-QName
   // but for Vue templates we can enforce a simple charset
@@ -10092,7 +10042,10 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
     }
 
     return res.slice(0, -1) + '}';
-  }
+  } // Generate handler code with binding params on Weex
+
+  /* istanbul ignore next */
+
 
   function genHandler(name, handler) {
     if (!handler) {
@@ -10626,15 +10579,14 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
     }
 
     return res.slice(0, -1);
-  } // #3895, #4268
+  }
+  /* istanbul ignore next */
 
 
   function transformSpecialNewlines(text) {
     return text.replace(/\u2028/g, "\\u2028").replace(/\u2029/g, "\\u2029");
   }
   /*  */
-  // these keywords should not appear inside expressions, but operators like
-  // typeof, instanceof and in are allowed
 
 
   var prohibitedKeywordRE = new RegExp('\\b' + ('do,if,for,let,new,try,var,case,else,with,await,break,catch,class,const,' + 'super,throw,while,yield,delete,export,import,return,switch,default,' + 'extends,finally,continue,debugger,function,arguments').split(',').join('\\b|\\b') + '\\b'); // these unary operators should not be used as property/method names
@@ -10851,9 +10803,6 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
     };
   }
   /*  */
-  // `createCompilerCreator` allows creating compilers that use alternative
-  // parser/optimizer/codegen, e.g the SSR optimizing compiler.
-  // Here we just export a default compiler using the default parts.
 
 
   var createCompiler = createCompilerCreator(function baseCompile(template, options) {
@@ -10875,7 +10824,6 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
   var ref$1 = createCompiler(baseOptions);
   var compileToFunctions = ref$1.compileToFunctions;
   /*  */
-  // check whether current browser encodes a char inside attribute values
 
   var div;
 
@@ -10989,7 +10937,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 new _vue.default({
   el: '.app',
   render: function render(createElement) {
-    return createElement('div', 'Hello World');
+    return createElement('div', {}, 'Hello World');
   }
 });
 },{"../../../vue-source/dist/vue.js":"../../vue-source/dist/vue.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {

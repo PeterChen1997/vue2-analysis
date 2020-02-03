@@ -269,6 +269,7 @@ export function createPatchFunction (backend) {
   }
 
   function insert (parent, elm, ref) {
+    debugger
     if (isDef(parent)) {
       if (isDef(ref)) {
         if (ref.parentNode === parent) {

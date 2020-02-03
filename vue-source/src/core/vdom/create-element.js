@@ -41,6 +41,8 @@ export function createElement (
   if (isTrue(alwaysNormalize)) {
     normalizationType = ALWAYS_NORMALIZE
   }
+
+  // normalizationType 表示子节点规范的类型，类型不同规范的方法也就不一样，它主要是参考 render 函数是编译生成的还是用户手写的
   return _createElement(context, tag, data, children, normalizationType)
 }
 
@@ -92,6 +94,8 @@ export function _createElement (
   } else if (normalizationType === SIMPLE_NORMALIZE) {
     children = simpleNormalizeChildren(children)
   }
+
+  // vnode创建过程
   let vnode, ns
   if (typeof tag === 'string') {
     let Ctor
