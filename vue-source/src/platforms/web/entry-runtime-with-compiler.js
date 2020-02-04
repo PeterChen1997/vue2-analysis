@@ -62,6 +62,7 @@ Vue.prototype.$mount = function (
         mark('compile')
       }
 
+      // 此处编译template
       const { render, staticRenderFns } = compileToFunctions(template, {
         shouldDecodeNewlines,
         shouldDecodeNewlinesForHref,
@@ -78,6 +79,8 @@ Vue.prototype.$mount = function (
       }
     }
   }
+
+  debugger // 获取el，开始mount
   return mount.call(this, el, hydrating)
 }
 

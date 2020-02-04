@@ -269,7 +269,6 @@ export function createPatchFunction (backend) {
   }
 
   function insert (parent, elm, ref) {
-    debugger
     if (isDef(parent)) {
       if (isDef(ref)) {
         if (ref.parentNode === parent) {
@@ -732,6 +731,8 @@ export function createPatchFunction (backend) {
         const oldElm = oldVnode.elm
         const parentElm = nodeOps.parentNode(oldElm)
 
+        debugger // createElm
+
         // create new node
         createElm(
           vnode,
@@ -773,6 +774,8 @@ export function createPatchFunction (backend) {
           }
         }
 
+        debugger // 删除老元素
+
         // destroy old node
         if (isDef(parentElm)) {
           removeVnodes(parentElm, [oldVnode], 0, 0)
@@ -783,6 +786,9 @@ export function createPatchFunction (backend) {
     }
 
     invokeInsertHook(vnode, insertedVnodeQueue, isInitialPatch)
+
+    debugger // 返回真实DOM
+
     return vnode.elm
   }
 }

@@ -120,7 +120,7 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 })({"../../vue-source/dist/vue.js":[function(require,module,exports) {
 var define;
 var global = arguments[3];
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 /*!
  * Vue.js v2.5.17
@@ -695,7 +695,9 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
     _Set = Set;
   } else {
     // a non-standard Set polyfill that only works with primitive keys.
-    _Set = function () {
+    _Set =
+    /*@__PURE__*/
+    function () {
       function Set() {
         this.set = Object.create(null);
       }
@@ -2559,12 +2561,11 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
     var hookRE = /^hook:/;
 
     Vue.prototype.$on = function (event, fn) {
-      var this$1 = this;
       var vm = this;
 
       if (Array.isArray(event)) {
         for (var i = 0, l = event.length; i < l; i++) {
-          this$1.$on(event[i], fn);
+          this.$on(event[i], fn);
         }
       } else {
         (vm._events[event] || (vm._events[event] = [])).push(fn); // optimize hook:event cost by using a boolean flag marked at registration
@@ -2592,7 +2593,6 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
     };
 
     Vue.prototype.$off = function (event, fn) {
-      var this$1 = this;
       var vm = this; // all
 
       if (!arguments.length) {
@@ -2603,7 +2603,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
       if (Array.isArray(event)) {
         for (var i = 0, l = event.length; i < l; i++) {
-          this$1.$off(event[i], fn);
+          this.$off(event[i], fn);
         }
 
         return vm;
@@ -2780,7 +2780,9 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       // based on the rendering backend used.
 
       if (!prevVnode) {
+        debugger; // patch
         // initial render
+
         vm.$el = vm.__patch__(vm.$el, vnode, hydrating, false
         /* removeOnly */
         , vm.$options._parentElm, vm.$options._refElm); // no need for the ref nodes after initial patch
@@ -2887,6 +2889,8 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       }
     }
 
+    debugger; // 生命周期
+
     callHook(vm, 'beforeMount');
     var updateComponent;
     /* istanbul ignore if */
@@ -2912,6 +2916,8 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       };
     } else {
       updateComponent = function updateComponent() {
+        debugger; // _render -> _update
+
         vm._update(vm._render(), hydrating);
       };
     } // we set this to vm._watcher inside the watcher's constructor
@@ -2927,6 +2933,8 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
     if (vm.$vnode == null) {
       vm._isMounted = true;
+      debugger; // 生命周期
+
       callHook(vm, 'mounted');
     }
 
@@ -3316,14 +3324,13 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
 
   Watcher.prototype.cleanupDeps = function cleanupDeps() {
-    var this$1 = this;
     var i = this.deps.length;
 
     while (i--) {
-      var dep = this$1.deps[i];
+      var dep = this.deps[i];
 
-      if (!this$1.newDepIds.has(dep.id)) {
-        dep.removeSub(this$1);
+      if (!this.newDepIds.has(dep.id)) {
+        dep.removeSub(this);
       }
     }
 
@@ -3398,11 +3405,10 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
 
   Watcher.prototype.depend = function depend() {
-    var this$1 = this;
     var i = this.deps.length;
 
     while (i--) {
-      this$1.deps[i].depend();
+      this.deps[i].depend();
     }
   };
   /**
@@ -3411,8 +3417,6 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
 
   Watcher.prototype.teardown = function teardown() {
-    var this$1 = this;
-
     if (this.active) {
       // remove self from vm's watcher list
       // this is a somewhat expensive operation so we skip it
@@ -3424,7 +3428,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       var i = this.deps.length;
 
       while (i--) {
-        this$1.deps[i].removeSub(this$1);
+        this.deps[i].removeSub(this);
       }
 
       this.active = false;
@@ -4594,6 +4598,8 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       var vnode;
 
       try {
+        debugger; // createElement
+
         vnode = render.call(vm._renderProxy, vm.$createElement);
       } catch (e) {
         handleError(e, vm, "render"); // return error render result,
@@ -4626,6 +4632,8 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
 
       vnode.parent = _parentVnode;
+      debugger; // 生成vnode
+
       return vnode;
     };
   }
@@ -4664,7 +4672,9 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
       {
         initProxy(vm);
-      } // expose real self
+      }
+      debugger; // 生命周期
+      // expose real self
 
       vm._self = vm;
       initLifecycle(vm);
@@ -4686,6 +4696,8 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       }
 
       if (vm.$options.el) {
+        debugger; // $mount 挂载
+
         vm.$mount(vm.$options.el);
       }
     };
@@ -5017,10 +5029,8 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       this.keys = [];
     },
     destroyed: function destroyed() {
-      var this$1 = this;
-
-      for (var key in this$1.cache) {
-        pruneCacheEntry(this$1.cache, key, this$1.keys);
+      for (var key in this.cache) {
+        pruneCacheEntry(this.cache, key, this.keys);
       }
     },
     mounted: function mounted() {
@@ -5687,8 +5697,6 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
     }
 
     function insert(parent, elm, ref$$1) {
-      debugger;
-
       if (isDef(parent)) {
         if (isDef(ref$$1)) {
           if (ref$$1.parentNode === parent) {
@@ -6201,7 +6209,9 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
 
           var oldElm = oldVnode.elm;
-          var parentElm$1 = nodeOps.parentNode(oldElm); // create new node
+          var parentElm$1 = nodeOps.parentNode(oldElm);
+          debugger; // createElm
+          // create new node
 
           createElm(vnode, insertedVnodeQueue, // extremely rare edge case: do not insert if old element is in a
           // leaving transition. Only happens when combining transition +
@@ -6241,8 +6251,10 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
               ancestor = ancestor.parent;
             }
-          } // destroy old node
+          }
 
+          debugger; // 删除老元素
+          // destroy old node
 
           if (isDef(parentElm$1)) {
             removeVnodes(parentElm$1, [oldVnode], 0, 0);
@@ -6253,6 +6265,8 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       }
 
       invokeInsertHook(vnode, insertedVnodeQueue, isInitialPatch);
+      debugger; // 返回真实DOM
+
       return vnode.elm;
     };
   }
@@ -10885,7 +10899,8 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
         /* istanbul ignore if */
         if ("development" !== 'production' && config.performance && mark) {
           mark('compile');
-        }
+        } // 此处编译template
+
 
         var ref = compileToFunctions(template, {
           shouldDecodeNewlines: shouldDecodeNewlines,
@@ -10905,6 +10920,8 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
         }
       }
     }
+
+    debugger; // 获取el，开始mount
 
     return mount.call(this, el, hydrating);
   };
@@ -10940,7 +10957,7 @@ new _vue.default({
     return createElement('div', {}, 'Hello World');
   }
 });
-},{"../../../vue-source/dist/vue.js":"../../vue-source/dist/vue.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"../../../vue-source/dist/vue.js":"../../vue-source/dist/vue.js"}],"../../../../../.nvm/versions/node/v10.16.0/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -10968,7 +10985,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63657" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58315" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
@@ -11144,5 +11161,5 @@ function hmrAcceptRun(bundle, id) {
     return true;
   }
 }
-},{}]},{},["node_modules/parcel-bundler/src/builtins/hmr-runtime.js","1-new_instance/main.js"], null)
+},{}]},{},["../../../../../.nvm/versions/node/v10.16.0/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","1-new_instance/main.js"], null)
 //# sourceMappingURL=/main.e6423b0b.js.map

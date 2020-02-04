@@ -47,6 +47,9 @@ export function initMixin (Vue: Class<Component>) {
     } else {
       vm._renderProxy = vm
     }
+
+    debugger // 生命周期
+
     // expose real self
     vm._self = vm
     initLifecycle(vm)
@@ -66,6 +69,7 @@ export function initMixin (Vue: Class<Component>) {
     }
 
     if (vm.$options.el) {
+      debugger // $mount 挂载
       vm.$mount(vm.$options.el)
     }
   }

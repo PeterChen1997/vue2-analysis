@@ -62,6 +62,8 @@ export function lifecycleMixin (Vue: Class<Component>) {
     // Vue.prototype.__patch__ is injected in entry points
     // based on the rendering backend used.
     if (!prevVnode) {
+      debugger // patch
+
       // initial render
       vm.$el = vm.__patch__(
         vm.$el, vnode, hydrating, false /* removeOnly */,
@@ -168,6 +170,8 @@ export function mountComponent (
       }
     }
   }
+
+  debugger // 生命周期
   callHook(vm, 'beforeMount')
 
   let updateComponent
@@ -191,6 +195,8 @@ export function mountComponent (
     }
   } else {
     updateComponent = () => {
+      debugger // _render -> _update
+
       vm._update(vm._render(), hydrating)
     }
   }
@@ -205,6 +211,9 @@ export function mountComponent (
   // mounted is called for render-created child components in its inserted hook
   if (vm.$vnode == null) {
     vm._isMounted = true
+
+    debugger // 生命周期
+
     callHook(vm, 'mounted')
   }
   return vm
