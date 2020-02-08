@@ -4,7 +4,7 @@
   "description": "A lite version for vue",
   "main": "index.js",
   "scripts": {
-    "dev": "parcel -p 8081 watch index.html"
+    "dev": "parcel -p 8081 watch index.html --open"
   },
   "author": "",
   "license": "ISC",
