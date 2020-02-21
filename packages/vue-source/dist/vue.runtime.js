@@ -1,6 +1,6 @@
 /*!
  * Vue.js v2.5.17
- * (c) 2014-2018 Evan You
+ * (c) 2014-2020 Evan You
  * Released under the MIT License.
  */
 (function (global, factory) {
@@ -552,7 +552,7 @@ if (typeof Set !== 'undefined' && isNative(Set)) {
   _Set = Set;
 } else {
   // a non-standard Set polyfill that only works with primitive keys.
-  _Set = (function () {
+  _Set = /*@__PURE__*/(function () {
     function Set () {
       this.set = Object.create(null);
     }
@@ -986,6 +986,7 @@ function defineReactive (
     configurable: true,
     get: function reactiveGetter () {
       var value = getter ? getter.call(obj) : val;
+      debugger
       if (Dep.target) {
         dep.depend();
         if (childOb) {
@@ -998,6 +999,7 @@ function defineReactive (
       return value
     },
     set: function reactiveSetter (newVal) {
+      debugger
       var value = getter ? getter.call(obj) : val;
       /* eslint-disable no-self-compare */
       if (newVal === value || (newVal !== newVal && value !== value)) {
@@ -2442,12 +2444,10 @@ function updateComponentListeners (
 function eventsMixin (Vue) {
   var hookRE = /^hook:/;
   Vue.prototype.$on = function (event, fn) {
-    var this$1 = this;
-
     var vm = this;
     if (Array.isArray(event)) {
       for (var i = 0, l = event.length; i < l; i++) {
-        this$1.$on(event[i], fn);
+        this.$on(event[i], fn);
       }
     } else {
       (vm._events[event] || (vm._events[event] = [])).push(fn);
@@ -2472,8 +2472,6 @@ function eventsMixin (Vue) {
   };
 
   Vue.prototype.$off = function (event, fn) {
-    var this$1 = this;
-
     var vm = this;
     // all
     if (!arguments.length) {
@@ -2483,7 +2481,7 @@ function eventsMixin (Vue) {
     // array of events
     if (Array.isArray(event)) {
       for (var i = 0, l = event.length; i < l; i++) {
-        this$1.$off(event[i], fn);
+        this.$off(event[i], fn);
       }
       return vm
     }
@@ -2639,6 +2637,7 @@ function initLifecycle (vm) {
 }
 
 function lifecycleMixin (Vue) {
+  // vnode挂载逻辑
   Vue.prototype._update = function (vnode, hydrating) {
     var vm = this;
     if (vm._isMounted) {
@@ -2758,6 +2757,7 @@ function mountComponent (
       }
     }
   }
+
   callHook(vm, 'beforeMount');
 
   var updateComponent;
@@ -2781,6 +2781,7 @@ function mountComponent (
     };
   } else {
     updateComponent = function () {
+      debugger
       vm._update(vm._render(), hydrating);
     };
   }
@@ -2788,6 +2789,7 @@ function mountComponent (
   // we set this to vm._watcher inside the watcher's constructor
   // since the watcher's initial patch may call $forceUpdate (e.g. inside child
   // component's mounted hook), which relies on vm._watcher being already defined
+  debugger
   new Watcher(vm, updateComponent, noop, null, true /* isRenderWatcher */);
   hydrating = false;
 
@@ -2795,6 +2797,7 @@ function mountComponent (
   // mounted is called for render-created child components in its inserted hook
   if (vm.$vnode == null) {
     vm._isMounted = true;
+
     callHook(vm, 'mounted');
   }
   return vm
@@ -3107,6 +3110,7 @@ var Watcher = function Watcher (
   this.expression = expOrFn.toString();
   // parse expression for getter
   if (typeof expOrFn === 'function') {
+    debugger
     this.getter = expOrFn;
   } else {
     this.getter = parsePath(expOrFn);
@@ -3133,6 +3137,7 @@ Watcher.prototype.get = function get () {
   var value;
   var vm = this.vm;
   try {
+    debugger
     value = this.getter.call(vm, vm);
   } catch (e) {
     if (this.user) {
@@ -3146,6 +3151,7 @@ Watcher.prototype.get = function get () {
     if (this.deep) {
       traverse(value);
     }
+    debugger
     popTarget();
     this.cleanupDeps();
   }
@@ -3170,13 +3176,11 @@ Watcher.prototype.addDep = function addDep (dep) {
  * Clean up for dependency collection.
  */
 Watcher.prototype.cleanupDeps = function cleanupDeps () {
-    var this$1 = this;
-
   var i = this.deps.length;
   while (i--) {
-    var dep = this$1.deps[i];
-    if (!this$1.newDepIds.has(dep.id)) {
-      dep.removeSub(this$1);
+    var dep = this.deps[i];
+    if (!this.newDepIds.has(dep.id)) {
+      dep.removeSub(this);
     }
   }
   var tmp = this.depIds;
@@ -3248,11 +3252,9 @@ Watcher.prototype.evaluate = function evaluate () {
  * Depend on all deps collected by this watcher.
  */
 Watcher.prototype.depend = function depend () {
-    var this$1 = this;
-
   var i = this.deps.length;
   while (i--) {
-    this$1.deps[i].depend();
+    this.deps[i].depend();
   }
 };
 
@@ -3260,8 +3262,6 @@ Watcher.prototype.depend = function depend () {
  * Remove self from all dependencies' subscriber list.
  */
 Watcher.prototype.teardown = function teardown () {
-    var this$1 = this;
-
   if (this.active) {
     // remove self from vm's watcher list
     // this is a somewhat expensive operation so we skip it
@@ -3271,7 +3271,7 @@ Watcher.prototype.teardown = function teardown () {
     }
     var i = this.deps.length;
     while (i--) {
-      this$1.deps[i].removeSub(this$1);
+      this.deps[i].removeSub(this);
     }
     this.active = false;
   }
@@ -4344,6 +4344,8 @@ function createElement (
   if (isTrue(alwaysNormalize)) {
     normalizationType = ALWAYS_NORMALIZE;
   }
+
+  // normalizationType 表示子节点规范的类型，类型不同规范的方法也就不一样，它主要是参考 render 函数是编译生成的还是用户手写的
   return _createElement(context, tag, data, children, normalizationType)
 }
 
@@ -4395,6 +4397,8 @@ function _createElement (
   } else if (normalizationType === SIMPLE_NORMALIZE) {
     children = simpleNormalizeChildren(children);
   }
+
+  // vnode创建过程
   var vnode, ns;
   if (typeof tag === 'string') {
     var Ctor;
@@ -4528,6 +4532,7 @@ function renderMixin (Vue) {
     // render self
     var vnode;
     try {
+      debugger
       vnode = render.call(vm._renderProxy, vm.$createElement);
     } catch (e) {
       handleError(e, vm, "render");
@@ -4560,6 +4565,7 @@ function renderMixin (Vue) {
     }
     // set parent
     vnode.parent = _parentVnode;
+
     return vnode
   };
 }
@@ -4601,6 +4607,7 @@ function initMixin (Vue) {
     {
       initProxy(vm);
     }
+
     // expose real self
     vm._self = vm;
     initLifecycle(vm);
@@ -4938,10 +4945,8 @@ var KeepAlive = {
   },
 
   destroyed: function destroyed () {
-    var this$1 = this;
-
-    for (var key in this$1.cache) {
-      pruneCacheEntry(this$1.cache, key, this$1.keys);
+    for (var key in this.cache) {
+      pruneCacheEntry(this.cache, key, this.keys);
     }
   },
 
@@ -6160,6 +6165,7 @@ function createPatchFunction (backend) {
     }
 
     invokeInsertHook(vnode, insertedVnodeQueue, isInitialPatch);
+
     return vnode.elm
   }
 }

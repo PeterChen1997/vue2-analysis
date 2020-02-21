@@ -62,8 +62,6 @@ export function lifecycleMixin (Vue: Class<Component>) {
     // Vue.prototype.__patch__ is injected in entry points
     // based on the rendering backend used.
     if (!prevVnode) {
-      debugger // patch
-
       // initial render
       vm.$el = vm.__patch__(
         vm.$el, vnode, hydrating, false /* removeOnly */,
@@ -171,7 +169,6 @@ export function mountComponent (
     }
   }
 
-  debugger // 生命周期
   callHook(vm, 'beforeMount')
 
   let updateComponent
@@ -195,8 +192,7 @@ export function mountComponent (
     }
   } else {
     updateComponent = () => {
-      debugger // _render -> _update
-
+      debugger
       vm._update(vm._render(), hydrating)
     }
   }
@@ -204,6 +200,7 @@ export function mountComponent (
   // we set this to vm._watcher inside the watcher's constructor
   // since the watcher's initial patch may call $forceUpdate (e.g. inside child
   // component's mounted hook), which relies on vm._watcher being already defined
+  debugger
   new Watcher(vm, updateComponent, noop, null, true /* isRenderWatcher */)
   hydrating = false
 
@@ -211,8 +208,6 @@ export function mountComponent (
   // mounted is called for render-created child components in its inserted hook
   if (vm.$vnode == null) {
     vm._isMounted = true
-
-    debugger // 生命周期
 
     callHook(vm, 'mounted')
   }

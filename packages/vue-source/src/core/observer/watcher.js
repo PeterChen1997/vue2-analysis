@@ -74,6 +74,7 @@ export default class Watcher {
       : ''
     // parse expression for getter
     if (typeof expOrFn === 'function') {
+      debugger
       this.getter = expOrFn
     } else {
       this.getter = parsePath(expOrFn)
@@ -100,6 +101,7 @@ export default class Watcher {
     let value
     const vm = this.vm
     try {
+      debugger
       value = this.getter.call(vm, vm)
     } catch (e) {
       if (this.user) {
@@ -113,6 +115,7 @@ export default class Watcher {
       if (this.deep) {
         traverse(value)
       }
+      debugger
       popTarget()
       this.cleanupDeps()
     }
